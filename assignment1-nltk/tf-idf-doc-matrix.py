@@ -31,13 +31,28 @@ def read_data(dir: str):
             print(f"Read file: {f}")
     return data
 
+
 def tokenize_words(data: dict):
     """Tokenize the words in the given data."""
+    tokenized = {}
     with open("tokenized_words.txt", "w", encoding="UTF-8") as file:
         for k, v in data.items():
-            tokenized = word_tokenize(v)
+            word_tokens = word_tokenize(v)
+            tokenized[k] = word_tokens
             file.write(f"Tokenized words for {k}:\n")
-            file.write(f"{tokenized}\n")
+            file.write(f"{word_tokens}\n")
+            file.write("-------------------\n\n")
+    return tokenized
+
+
+def remove_stop_words(data: dict):
+    """Remove stop words from the given data."""
+    stop_words = set(stopwords.words("english")) | set(string.punctuation)
+    with open("no_stop_words.txt", "w", encoding="UTF-8") as file:
+        for k, v in data.items():
+            no_stop_words = [w for w in v if not w in stop_words]
+            file.write(f"Removed stop words for {k}:\n")
+            file.write(f"{no_stop_words}\n")
             file.write("-------------------\n\n")
 
 
@@ -50,12 +65,12 @@ def main():
     # Prepare to work with the documents
     # At this time, the only preprocessing step is to lowercase the documents
     data = {k: v.lower() for k, v in data.items()}
-    print(data)
 
     # Task 1 - tokenize words
-    tokenize_words(data)
+    tokenized = tokenize_words(data)
 
     # Task 1 - remove stop words
+    remove_stop_words(tokenized)
 
     # Task 1 - stem
 
