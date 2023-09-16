@@ -1,6 +1,7 @@
 """Calculate tf-idf for words in a set of documents and calculate pairwise cosine similarity for the documents"""
 import os
 from pathlib import Path
+import string
 
 import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize
@@ -30,6 +31,15 @@ def read_data(dir: str):
             print(f"Read file: {f}")
     return data
 
+def tokenize_words(data: dict):
+    """Tokenize the words in the given data."""
+    with open("tokenized_words.txt", "w", encoding="UTF-8") as file:
+        for k, v in data.items():
+            tokenized = word_tokenize(v)
+            file.write(f"Tokenized words for {k}:\n")
+            file.write(f"{tokenized}\n")
+            file.write("-------------------\n\n")
+
 
 def main():
     # Uncomment and run this line once to download the nltk data
@@ -42,8 +52,12 @@ def main():
     data = {k: v.lower() for k, v in data.items()}
     print(data)
 
-    # Task 1:
-    # - Tokenize the documents into words, remove stop words, and conduct stemming
+    # Task 1 - tokenize words
+    tokenize_words(data)
+
+    # Task 1 - remove stop words
+
+    # Task 1 - stem
 
     # Task 2:
     # - Calculate tf-idf for each word in each document and generate document-word
