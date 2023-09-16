@@ -4,9 +4,17 @@ Assignments and notes for the information retrieval class.
 
 If you just cloned the repository, please read the [development environment](#development-environment) section before proceeding.
 
-## Assignment 1 - NLTK
+## Assignment 1 - Basic NLP pipeline with NLTK and scikit-learn
 
 ### Assignment description
+
+This assignment is the basic NLP pipeline using [NLTK](https://www.nltk.org/) and [scikit-learn](https://scikit-learn.org/stable/).
+
+- Tokenization
+- Stop words removal
+- Stemming
+- TF-IDF calculation
+- Pairwise cosine similarity calculation
 
 This is the description, copied verbatim from the assignment.
 
