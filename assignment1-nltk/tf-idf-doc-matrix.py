@@ -1,6 +1,7 @@
 """Calculate tf-idf for words in a set of documents and calculate pairwise cosine similarity for the documents"""
-from pathlib import Path
+import os
 import string
+from pathlib import Path
 
 import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize
@@ -14,14 +15,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 
 def read_data(dir: str):
-    """Read all text files in the given directory.
-
-    Args:
-        dir (str): The directory to read the text files from.
-
-    Returns:
-        dict: A dictionary with the file name as the key and the file contents as the value.
-    """
+    """Read all text files in the given directory."""
     files = list(Path(dir).glob("*.txt"))
     data = {}
     for f in files:
@@ -31,13 +25,17 @@ def read_data(dir: str):
     return data
 
 
-def write_data(filename, data, format_string):
-    # Write into a results directory to keep the data separate from the code
+def full_path_from_name(name: str):
+    """Return the path into a results directory to keep the results file separate."""
     results_dir = Path("results")
     results_dir.mkdir(parents=True, exist_ok=True)
-    filename = results_dir / filename
+    filename = results_dir / name
+    return str(filename)
 
-    with open(str(filename), "w", encoding="UTF-8") as file:
+
+def write_data(filename, data, format_string):
+    filename = full_path_from_name(filename)
+    with open(filename, "w", encoding="UTF-8") as file:
         for k, v in data.items():
             file.write(format_string.format(k, v))
             file.write("\n-------------------\n\n")
@@ -78,19 +76,39 @@ def stem_words(data: dict):
     return stemmed_data
 
 
+def calculate_tf_idf(file_contents: dict):
+    """Calculate tf-idf for the given data."""
+    tfidf = TfidfVectorizer()
+    tfs = tfidf.fit_transform(file_contents.values())
+    doc_matrix = tfs.toarray()
+    set_vocab = tfidf.get_feature_names_out()
+
+    with open(full_path_from_name("task2_tf_idf.txt"), "w", encoding="UTF-8") as file:
+        # Add the header
+        header = f"{'Word':<20}" + "  ".join([f"{file_name:<17}" for file_name in file_contents.keys()])
+        file.write(header + "\n")
+
+        # Print the TF-IDF values for each term in each file_content entry
+        # The order of the files here is the same as in the header because starting in Python 3.7 dictionaries
+        # remember the order of insertion
+        row_format = f"{{:<20}}" + "  ".join([f"{{:<.15f}}" for _ in range(len(file_contents))])
+        for i, word in enumerate(set_vocab):
+            row = row_format.format(word, *doc_matrix[:, i])
+            file.write(row + "\n")
+
 def main():
     # Uncomment and run this line once to download the nltk data
     # nltk.download()
 
-    data = read_data("data")
+    file_contents = read_data("data")
 
     # Prepare to work with the documents
     # At this time, the only preprocessing step is to lowercase the documents
-    data = {k: v.lower() for k, v in data.items()}
+    file_contents = {k: v.lower() for k, v in file_contents.items()}
 
     # Task 1.1
     # - Tokenize the documents into words...
-    tokenized = tokenize_words(data)
+    tokenized = tokenize_words(file_contents)
 
     # Task 1.2
     # - ...remove stop words
@@ -98,16 +116,22 @@ def main():
 
     # Task 1.3
     # - ...and conduct stemming
-    _ = stem_words(no_stop_words)
+    stemmed_words = stem_words(no_stop_words)
 
     # Task 2:
     # - Calculate tf-idf for each word in each document and generate document-word
     #   matrix (each element in the matrix is the tf-idf score for a word in a document)
+    calculate_tf_idf(file_contents)
 
     # Task 3:
     # - Calculate pairwise cosine similarity for the documents
 
 
-
 if __name__ == "__main__":
+    # In case it was started from the debugger (runs from the top-level directory)
+    # The code in the script assumes it is run from the assignment1-nltk directory
+    dir = "assignment1-nltk"
+    if Path.cwd().name != dir:
+        os.chdir(dir)
+
     main()
