@@ -4,14 +4,26 @@ import string
 from pathlib import Path
 
 import nltk
-from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.feature_extraction.text import TfidfTransformer
-from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+
+
+def download_nltk_data():
+    """Download necessary NLTK data files if not already present."""
+    necessary_data_packages = [
+        ("corpora/stopwords", "stopwords"),
+        ("tokenizers/punkt", "punkt")
+    ]
+
+    for data_path, package in necessary_data_packages:
+        try:
+            nltk.data.find(data_path)
+        except LookupError:
+            nltk.download(package)
 
 
 def read_data(dir: str):
@@ -108,8 +120,7 @@ def calculate_cosine_similarity(file_contents: dict, tfs):
 
 
 def main():
-    # Uncomment and run this line once to download the nltk data
-    # nltk.download()
+    download_nltk_data()
 
     file_contents = read_data("data")
 
