@@ -122,6 +122,7 @@ def calculate_cosine_similarity(file_contents: dict, tfs):
 def main():
     download_nltk_data()
 
+    print("Reading data...")
     file_contents = read_data("data")
 
     # Prepare to work with the documents
@@ -130,24 +131,35 @@ def main():
 
     # Task 1.1
     # - Tokenize the documents into words...
+    print("Tokenizing words...")
     tokenized = tokenize_words(file_contents)
 
     # Task 1.2
     # - ...remove stop words
+    print("Removing stop words...")
     no_stop_words = remove_stop_words(tokenized)
 
     # Task 1.3
     # - ...and conduct stemming
-    _ = stem_words(no_stop_words)
+    print("Stemming words...")
+    stemmed_words = stem_words(no_stop_words)
 
     # Task 2:
     # - Calculate tf-idf for each word in each document and generate document-word
     #   matrix (each element in the matrix is the tf-idf score for a word in a document)
+    print("Calculating TF-IDF...")
     tfs = calculate_tf_idf(file_contents)
 
     # Task 3:
     # - Calculate pairwise cosine similarity for the documents
+    print("Calculating cosine similarity...")
     calculate_cosine_similarity(file_contents, tfs)
+
+    print("\nDone. Results in these files:")
+    all_files = sorted(Path("results").glob("*"))
+    for f in all_files:
+        print(f)
+
 
 
 if __name__ == "__main__":
