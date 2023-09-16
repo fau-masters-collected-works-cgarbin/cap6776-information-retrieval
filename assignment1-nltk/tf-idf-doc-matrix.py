@@ -122,8 +122,6 @@ def calculate_cosine_similarity(tf_idfs, doc_names: list):
             for j in range(i+1, len(doc_names)):
                 similarity = cosine_similarity(tf_idfs[i], tf_idfs[j])
                 file.write(f"Similarity between {doc_names[i]} and {doc_names[j]}: {similarity}\n")
-                print(f"Similarity between {doc_names[i]} and {doc_names[j]}: {similarity}\n")
-
 
 def main():
     download_nltk_data()
@@ -172,7 +170,6 @@ def main():
     all_files = sorted(Path("results").glob("*"))
     for f in all_files:
         print(f)
-
 
 
 if __name__ == "__main__":
