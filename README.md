@@ -1,5 +1,7 @@
 # Information Retrieval class - Fall 2023
 
+Assignments and notes for the information retrieval class.
+
 If you just cloned the repository, please read the [development environment](#development-environment) section before proceeding.
 
 ## Assignment 1 - NLTK
@@ -18,6 +20,14 @@ _NOTE: Follow the instructions in the [development environment](#development-env
 > - Calculate pairwise cosine similarity for the documents
 >
 > Please include your screen shots for each of the above steps and also the final results of the pairwise cosine similarity scores in your report.
+
+Run the assignment:
+
+```bash
+source venv/bin/activate
+cd assignment1-nltk
+python tf-idf-doc-matrix.py
+```
 
 ## Development environment
 

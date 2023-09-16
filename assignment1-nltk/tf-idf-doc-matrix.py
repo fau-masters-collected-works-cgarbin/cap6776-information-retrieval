@@ -87,36 +87,42 @@ def stem_words(data: dict):
     return stemmed_data
 
 
-def calculate_tf_idf(file_contents: dict):
+def calculate_tf_idf(stemmed_text: dict):
     """Calculate tf-idf for the given data."""
-    tfidf = TfidfVectorizer()
-    tfs = tfidf.fit_transform(file_contents.values())
-    doc_matrix = tfs.toarray()
-    set_vocab = tfidf.get_feature_names_out()
+    vectorizer = TfidfVectorizer()
+    tf_idfs = vectorizer.fit_transform(stemmed_text.values())
+    doc_matrix = tf_idfs.toarray()
+    set_vocab = vectorizer.get_feature_names_out()
 
     with open(full_path_from_name("task2_tf_idf.txt"), "w", encoding="UTF-8") as file:
         # Add the header
-        header = f"{'Word':<20}" + "  ".join([f"{file_name:<17}" for file_name in file_contents.keys()])
+        header = f"{'Word':<20}" + "  ".join([f"{file_name:<17}" for file_name in stemmed_text.keys()])
         file.write(header + "\n")
 
         # Print the TF-IDF values for each term in each file_content entry
         # The order of the files here is the same as in the header because starting in Python 3.7 dictionaries
         # remember the order of insertion
-        row_format = f"{{:<20}}" + "  ".join([f"{{:<.15f}}" for _ in range(len(file_contents))])
+        row_format = f"{{:<20}}" + "  ".join([f"{{:<.15f}}" for _ in range(len(stemmed_text))])
         for i, word in enumerate(set_vocab):
             row = row_format.format(word, *doc_matrix[:, i])
             file.write(row + "\n")
 
-    return tfs
+    return tf_idfs
 
 
-def calculate_cosine_similarity(file_contents: dict, tfs):
-    """Calculate pairwise cosine similarity for the given data."""
-    file_names = list(file_contents.keys())
+def calculate_cosine_similarity(tf_idfs, doc_names: list):
+    """Calculate pairwise cosine similarity for the given data.
+
+    Args:
+        tfs: TF-IDF matrix
+        doc_names: List of document names, in the same order as the rows in the TF-IDF matrix
+    """
     with open(full_path_from_name("task3_cosine_similarity.txt"), "w", encoding="UTF-8") as file:
-        for i in range(len(file_contents)):
-            for j in range(i+1, len(file_contents)):
-                file.write(f"Similarity between {file_names[i]} and {file_names[j]}: {cosine_similarity(tfs[i], tfs[j])}\n")
+        for i in range(len(doc_names)):
+            for j in range(i+1, len(doc_names)):
+                similarity = cosine_similarity(tf_idfs[i], tf_idfs[j])
+                file.write(f"Similarity between {doc_names[i]} and {doc_names[j]}: {similarity}\n")
+                print(f"Similarity between {doc_names[i]} and {doc_names[j]}: {similarity}\n")
 
 
 def main():
@@ -147,13 +153,20 @@ def main():
     # Task 2:
     # - Calculate tf-idf for each word in each document and generate document-word
     #   matrix (each element in the matrix is the tf-idf score for a word in a document)
+    # Note that we train the TF-IDF vectorizer on fully preprocessed text (tokenized, removed stop words, stemmed)
+    # See https://courses.cs.duke.edu/spring14/compsci290/assignments/lab02.html for an example
+    # Note that in the example it uses the `tokenizer` parameter to pass a custom tokenizer, while here we use
+    # a preprocessed text, so we don't need to pass a custom tokenizer
+    # Similar example in https://saturncloud.io/blog/how-to-pass-a-preprocessor-to-tfidfvectorizer-in-python/
+    # Prepare the data for the TF-IDF calculation
+    stemmed_as_strings = {k: " ".join(v) for k, v in stemmed_words.items()}
     print("Calculating TF-IDF...")
-    tfs = calculate_tf_idf(file_contents)
+    tf_idfs = calculate_tf_idf(stemmed_as_strings)
 
     # Task 3:
     # - Calculate pairwise cosine similarity for the documents
     print("Calculating cosine similarity...")
-    calculate_cosine_similarity(file_contents, tfs)
+    calculate_cosine_similarity(tf_idfs, list(file_contents.keys()))
 
     print("\nDone. Results in these files:")
     all_files = sorted(Path("results").glob("*"))
