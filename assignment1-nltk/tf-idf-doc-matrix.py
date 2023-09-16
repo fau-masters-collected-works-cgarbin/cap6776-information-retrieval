@@ -32,28 +32,34 @@ def read_data(dir: str):
     return data
 
 
+def write_data(filename, data, format_string):
+    with open(filename, "w", encoding="UTF-8") as file:
+        for k, v in data.items():
+            file.write(format_string.format(k, v))
+            file.write("\n-------------------\n\n")
+
+
 def tokenize_words(data: dict):
     """Tokenize the words in the given data."""
-    tokenized = {}
-    with open("tokenized_words.txt", "w", encoding="UTF-8") as file:
-        for k, v in data.items():
-            word_tokens = word_tokenize(v)
-            tokenized[k] = word_tokens
-            file.write(f"Tokenized words for {k}:\n")
-            file.write(f"{word_tokens}\n")
-            file.write("-------------------\n\n")
-    return tokenized
+    tokenized_data = {}
+    for k, v in data.items():
+        word_tokens = word_tokenize(v)
+        tokenized_data[k] = word_tokens
+
+    write_data("tokenized_words.txt", tokenized_data, "Tokenized words for {}:\n{}")
+    return tokenized_data
 
 
 def remove_stop_words(data: dict):
     """Remove stop words from the given data."""
     stop_words = set(stopwords.words("english")) | set(string.punctuation)
-    with open("no_stop_words.txt", "w", encoding="UTF-8") as file:
-        for k, v in data.items():
-            no_stop_words = [w for w in v if not w in stop_words]
-            file.write(f"Removed stop words for {k}:\n")
-            file.write(f"{no_stop_words}\n")
-            file.write("-------------------\n\n")
+    no_stop_words_data = {}
+    for k, v in data.items():
+        no_stop_words = [w for w in v if not w in stop_words]
+        no_stop_words_data[k] = no_stop_words
+
+    write_data("no_stop_words.txt", no_stop_words_data, "Removed stop words for {}:\n{}")
+    return no_stop_words_data
 
 
 def main():
