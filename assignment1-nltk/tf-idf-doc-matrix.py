@@ -127,7 +127,7 @@ def main():
 
     # Task 1.3
     # - ...and conduct stemming
-    stemmed_words = stem_words(no_stop_words)
+    _ = stem_words(no_stop_words)
 
     # Task 2:
     # - Calculate tf-idf for each word in each document and generate document-word
