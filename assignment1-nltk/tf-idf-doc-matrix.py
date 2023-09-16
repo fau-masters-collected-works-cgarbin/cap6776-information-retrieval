@@ -1,5 +1,4 @@
 """Calculate tf-idf for words in a set of documents and calculate pairwise cosine similarity for the documents"""
-import os
 from pathlib import Path
 import string
 
@@ -89,13 +88,16 @@ def main():
     # At this time, the only preprocessing step is to lowercase the documents
     data = {k: v.lower() for k, v in data.items()}
 
-    # Task 1 - tokenize words
+    # Task 1.1
+    # - Tokenize the documents into words...
     tokenized = tokenize_words(data)
 
-    # Task 1 - remove stop words
+    # Task 1.2
+    # - ...remove stop words
     no_stop_words = remove_stop_words(tokenized)
 
-    # Task 1 - stem
+    # Task 1.3
+    # - ...and conduct stemming
     _ = stem_words(no_stop_words)
 
     # Task 2:
