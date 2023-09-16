@@ -21,7 +21,6 @@ def read_data(dir: str):
     for f in files:
         with open(f, "r", encoding="UTF-8") as file:
             data[f.stem] = file.read()
-            print(f"Read file: {f}")
     return data
 
 
@@ -96,6 +95,18 @@ def calculate_tf_idf(file_contents: dict):
             row = row_format.format(word, *doc_matrix[:, i])
             file.write(row + "\n")
 
+    return tfs
+
+
+def calculate_cosine_similarity(file_contents: dict, tfs):
+    """Calculate pairwise cosine similarity for the given data."""
+    file_names = list(file_contents.keys())
+    with open(full_path_from_name("task3_cosine_similarity.txt"), "w", encoding="UTF-8") as file:
+        for i in range(len(file_contents)):
+            for j in range(i+1, len(file_contents)):
+                file.write(f"Similarity between {file_names[i]} and {file_names[j]}: {cosine_similarity(tfs[i], tfs[j])}\n")
+
+
 def main():
     # Uncomment and run this line once to download the nltk data
     # nltk.download()
@@ -121,10 +132,11 @@ def main():
     # Task 2:
     # - Calculate tf-idf for each word in each document and generate document-word
     #   matrix (each element in the matrix is the tf-idf score for a word in a document)
-    calculate_tf_idf(file_contents)
+    tfs = calculate_tf_idf(file_contents)
 
     # Task 3:
     # - Calculate pairwise cosine similarity for the documents
+    calculate_cosine_similarity(file_contents, tfs)
 
 
 if __name__ == "__main__":
