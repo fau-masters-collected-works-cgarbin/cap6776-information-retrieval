@@ -1,4 +1,4 @@
-# Information Retrieval class - Fall 2023
+# Information Retrieval class
 
 Assignments and notes for the information retrieval class.
 
@@ -26,10 +26,8 @@ _NOTE: Follow the instructions in the [development environment](#development-env
 > - Tokenize the documents into words, remove stop words, and conduct stemming
 > - Calculate tf-idf for each word in each document and generate document-word matrix (each element in the matrix is the tf-idf score for a word in a document)
 > - Calculate pairwise cosine similarity for the documents
->
-> Please include your screen shots for each of the above steps and also the final results of the pairwise cosine similarity scores in your report.
 
-Run the assignment:
+Run the assignment (configure the [development environment](#development-environment) if you haven't done so yet):
 
 ```bash
 source venv/bin/activate
