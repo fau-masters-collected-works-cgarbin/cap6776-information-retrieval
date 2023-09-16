@@ -33,7 +33,12 @@ def read_data(dir: str):
 
 
 def write_data(filename, data, format_string):
-    with open(filename, "w", encoding="UTF-8") as file:
+    # Write into a results directory to keep the data separate from the code
+    results_dir = Path("results")
+    results_dir.mkdir(parents=True, exist_ok=True)
+    filename = results_dir / filename
+
+    with open(str(filename), "w", encoding="UTF-8") as file:
         for k, v in data.items():
             file.write(format_string.format(k, v))
             file.write("\n-------------------\n\n")
@@ -46,7 +51,7 @@ def tokenize_words(data: dict):
         word_tokens = word_tokenize(v)
         tokenized_data[k] = word_tokens
 
-    write_data("tokenized_words.txt", tokenized_data, "Tokenized words for {}:\n{}")
+    write_data("task1.1_tokenized_words.txt", tokenized_data, "Tokenized words for {}:\n{}")
     return tokenized_data
 
 
@@ -58,8 +63,20 @@ def remove_stop_words(data: dict):
         no_stop_words = [w for w in v if not w in stop_words]
         no_stop_words_data[k] = no_stop_words
 
-    write_data("no_stop_words.txt", no_stop_words_data, "Removed stop words for {}:\n{}")
+    write_data("task1.2_no_stop_words.txt", no_stop_words_data, "Removed stop words for {}:\n{}")
     return no_stop_words_data
+
+
+def stem_words(data: dict):
+    """Stem the words in the given data."""
+    stemmer = PorterStemmer()
+    stemmed_data = {}
+    for k, v in data.items():
+        stemmed_words = [stemmer.stem(w) for w in v]
+        stemmed_data[k] = stemmed_words
+
+    write_data("task1.3_stemmed_words.txt", stemmed_data, "Stemmed words for {}:\n{}")
+    return stemmed_data
 
 
 def main():
@@ -76,9 +93,10 @@ def main():
     tokenized = tokenize_words(data)
 
     # Task 1 - remove stop words
-    remove_stop_words(tokenized)
+    no_stop_words = remove_stop_words(tokenized)
 
     # Task 1 - stem
+    _ = stem_words(no_stop_words)
 
     # Task 2:
     # - Calculate tf-idf for each word in each document and generate document-word
