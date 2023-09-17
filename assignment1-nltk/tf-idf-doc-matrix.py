@@ -161,7 +161,6 @@ def main():
     print("Calculating TF-IDF...")
     tf_idfs = calculate_tf_idf(stemmed_as_strings, "task2_tf_idf_stemmed.txt")
 
-
     # Task 3:
     # - Calculate pairwise cosine similarity for the documents
     print("Calculating cosine similarity...")
