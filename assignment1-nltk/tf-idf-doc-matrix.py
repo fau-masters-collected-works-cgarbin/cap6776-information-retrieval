@@ -87,14 +87,14 @@ def stem_words(data: dict):
     return stemmed_data
 
 
-def calculate_tf_idf(stemmed_text: dict):
+def calculate_tf_idf(stemmed_text: dict, result_file: str):
     """Calculate tf-idf for the given data."""
     vectorizer = TfidfVectorizer()
     tf_idfs = vectorizer.fit_transform(stemmed_text.values())
     doc_matrix = tf_idfs.toarray()
     set_vocab = vectorizer.get_feature_names_out()
 
-    with open(full_path_from_name("task2_tf_idf.txt"), "w", encoding="UTF-8") as file:
+    with open(full_path_from_name(result_file), "w", encoding="UTF-8") as file:
         # Add the header
         header = f"{'Word':<20}" + "  ".join([f"{file_name:<17}" for file_name in stemmed_text.keys()])
         file.write(header + "\n")
@@ -110,14 +110,14 @@ def calculate_tf_idf(stemmed_text: dict):
     return tf_idfs
 
 
-def calculate_cosine_similarity(tf_idfs, doc_names: list):
+def calculate_cosine_similarity(tf_idfs, doc_names: list, result_file: str):
     """Calculate pairwise cosine similarity for the given data.
 
     Args:
         tfs: TF-IDF matrix
         doc_names: List of document names, in the same order as the rows in the TF-IDF matrix
     """
-    with open(full_path_from_name("task3_cosine_similarity.txt"), "w", encoding="UTF-8") as file:
+    with open(full_path_from_name(result_file), "w", encoding="UTF-8") as file:
         for i in range(len(doc_names)):
             for j in range(i+1, len(doc_names)):
                 similarity = cosine_similarity(tf_idfs[i], tf_idfs[j])
@@ -159,12 +159,22 @@ def main():
     # Prepare the data for the TF-IDF calculation
     stemmed_as_strings = {k: " ".join(v) for k, v in stemmed_words.items()}
     print("Calculating TF-IDF...")
-    tf_idfs = calculate_tf_idf(stemmed_as_strings)
+    tf_idfs = calculate_tf_idf(stemmed_as_strings, "task2_tf_idf_stemmed.txt")
+
 
     # Task 3:
     # - Calculate pairwise cosine similarity for the documents
     print("Calculating cosine similarity...")
-    calculate_cosine_similarity(tf_idfs, list(file_contents.keys()))
+    calculate_cosine_similarity(tf_idfs, list(file_contents.keys()), "task3_cosine_similarity_stemmed.txt")
+
+    # Now we will repeat TF-IDF and cosine similarity calculations, but this time we will use the original text
+    tf_idfs = calculate_tf_idf(file_contents, "task2_tf_idf_original.txt")
+    calculate_cosine_similarity(tf_idfs, list(file_contents.keys()), "task3_cosine_similarity_original.txt")
+
+    # Once again, now without stop words
+    no_top_words_as_strings = {k: " ".join(v) for k, v in no_stop_words.items()}
+    tf_idfs = calculate_tf_idf(no_top_words_as_strings, "task2_tf_idf_no_stop_words.txt")
+    calculate_cosine_similarity(tf_idfs, list(file_contents.keys()), "task3_cosine_similarity_no_stop_words.txt")
 
     print("\nDone. Results in these files:")
     all_files = sorted(Path("results").glob("*"))

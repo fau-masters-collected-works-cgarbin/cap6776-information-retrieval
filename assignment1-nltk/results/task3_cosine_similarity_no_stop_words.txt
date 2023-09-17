@@ -1,0 +1,3 @@
+Similarity between 100554newsML and 100593newsML: [[0.7128995]]
+Similarity between 100554newsML and 100618newsML: [[0.73262156]]
+Similarity between 100593newsML and 100618newsML: [[0.97844265]]
