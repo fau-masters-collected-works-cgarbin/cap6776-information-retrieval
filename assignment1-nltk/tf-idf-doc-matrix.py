@@ -87,22 +87,22 @@ def stem_words(data: dict):
     return stemmed_data
 
 
-def calculate_tf_idf(stemmed_text: dict, result_file: str):
+def calculate_tf_idf(documents: dict, result_file: str):
     """Calculate tf-idf for the given data."""
     vectorizer = TfidfVectorizer()
-    tf_idfs = vectorizer.fit_transform(stemmed_text.values())
+    tf_idfs = vectorizer.fit_transform(documents.values())
     doc_matrix = tf_idfs.toarray()
     set_vocab = vectorizer.get_feature_names_out()
 
     with open(full_path_from_name(result_file), "w", encoding="UTF-8") as file:
         # Add the header
-        header = f"{'Word':<20}" + "  ".join([f"{file_name:<17}" for file_name in stemmed_text.keys()])
+        header = f"{'Word':<20}" + "  ".join([f"{file_name:<17}" for file_name in documents.keys()])
         file.write(header + "\n")
 
         # Print the TF-IDF values for each term in each file_content entry
         # The order of the files here is the same as in the header because starting in Python 3.7 dictionaries
         # remember the order of insertion
-        row_format = f"{{:<20}}" + "  ".join([f"{{:<.15f}}" for _ in range(len(stemmed_text))])
+        row_format = f"{{:<20}}" + "  ".join([f"{{:<.15f}}" for _ in range(len(documents))])
         for i, word in enumerate(set_vocab):
             row = row_format.format(word, *doc_matrix[:, i])
             file.write(row + "\n")
