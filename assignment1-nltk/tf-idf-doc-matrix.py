@@ -102,7 +102,7 @@ def calculate_tf_idf(documents: dict, result_file: str):
         # Print the TF-IDF values for each term in each file_content entry
         # The order of the files here is the same as in the header because starting in Python 3.7 dictionaries
         # remember the order of insertion
-        row_format = f"{{:<20}}" + "  ".join([f"{{:<.15f}}" for _ in range(len(documents))])
+        row_format = "{:<20}" + "  ".join(["{:<.15f}" for _ in range(len(documents))])
         for i, word in enumerate(set_vocab):
             row = row_format.format(word, *doc_matrix[:, i])
             file.write(row + "\n")
@@ -111,17 +111,13 @@ def calculate_tf_idf(documents: dict, result_file: str):
 
 
 def calculate_cosine_similarity(tf_idfs, doc_names: list, result_file: str):
-    """Calculate pairwise cosine similarity for the given data.
-
-    Args:
-        tfs: TF-IDF matrix
-        doc_names: List of document names, in the same order as the rows in the TF-IDF matrix
-    """
+    """Calculate pairwise cosine similarity for the given data."""
     with open(full_path_from_name(result_file), "w", encoding="UTF-8") as file:
-        for i in range(len(doc_names)):
-            for j in range(i+1, len(doc_names)):
+        for i, doc1 in enumerate(doc_names):
+            for j, doc2 in enumerate(doc_names[i+1:], i+1):
                 similarity = cosine_similarity(tf_idfs[i], tf_idfs[j])
-                file.write(f"Similarity between {doc_names[i]} and {doc_names[j]}: {similarity}\n")
+                file.write(f"Similarity between {doc1} and {doc2}: {similarity}\n")
+
 
 def main():
     download_nltk_data()
@@ -184,8 +180,8 @@ def main():
 if __name__ == "__main__":
     # In case it was started from the debugger (runs from the top-level directory)
     # The code in the script assumes it is run from the assignment1-nltk directory
-    dir = "assignment1-nltk"
-    if Path.cwd().name != dir:
-        os.chdir(dir)
+    asignment_dir = "assignment1-nltk"
+    if Path.cwd().name != asignment_dir:
+        os.chdir(asignment_dir)
 
     main()

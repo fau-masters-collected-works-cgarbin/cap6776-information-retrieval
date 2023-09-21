@@ -1,6 +1,6 @@
 {
     "workbench.colorCustomizations": {
         "diffEditor.insertedTextBackground": "#00bb0055",
-        "diffEditor.removedTextBackground": "#ff000055",
+        "diffEditor.removedTextBackground": "#ff000055"
     }
 }
