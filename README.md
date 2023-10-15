@@ -1,6 +1,6 @@
 # Information Retrieval class
 
-Assignments and notes for the information retrieval class.
+Assignments and notes for the FAU's CAP-6776 information retrieval class.
 
 If you just cloned the repository, please read the [development environment](#development-environment) section before proceeding.
 
@@ -16,7 +16,7 @@ This assignment is the basic NLP pipeline using [NLTK](https://www.nltk.org/) an
 - TF-IDF calculation
 - Pairwise cosine similarity calculation
 
-This is the description, copied verbatim from the assignment.
+Assignment description:
 
 _NOTE: Follow the instructions in the [development environment](#development-environment) section to set up the environment. The instructions below (from the assignment) are for reference only. They are missing some dependencies (e.g. scikit-learn) and do not specify the version to install (code may break in the future)._
 
