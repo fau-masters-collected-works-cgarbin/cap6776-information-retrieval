@@ -1,2 +1,12 @@
+# Assignment 1
 nltk ~= 3.8
 scikit-learn ~= 1.3
+
+# Assignment 3
+ # TensorFlow also installs numpy
+tensorflow ~= 2.14
+# Required by image.load_img
+Pillow ~= 10.1
+
+# Linters -- use the latest versions
+ruff

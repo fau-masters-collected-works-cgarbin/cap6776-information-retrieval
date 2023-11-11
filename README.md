@@ -8,7 +8,7 @@ If you just cloned the repository, please read the [development environment](#de
 
 ### Assignment description
 
-This assignment is the basic NLP pipeline using [NLTK](https://www.nltk.org/) and [scikit-learn](https://scikit-learn.org/stable/).
+This assignment is a basic NLP pipeline using [NLTK](https://www.nltk.org/) and [scikit-learn](https://scikit-learn.org/stable/).
 
 - Tokenization
 - Stop words removal
@@ -34,6 +34,14 @@ source venv/bin/activate
 cd assignment1-nltk
 python tf-idf-doc-matrix.py
 ```
+
+## Assignment 2 - Class project
+
+See the [project that summarizes GitHub issues with large language models (LLM)](https://github.com/fau-masters-collected-works-cgarbin/llm-github-issues).
+
+## Assignment 3 - Image classification using TensorFlow Mobilenet
+
+
 
 ## Development environment
 
