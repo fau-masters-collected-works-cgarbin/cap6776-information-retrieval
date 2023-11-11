@@ -68,7 +68,7 @@ def remove_stop_words(data: dict):
     stop_words = set(stopwords.words("english")) | set(string.punctuation)
     no_stop_words_data = {}
     for k, v in data.items():
-        no_stop_words = [w for w in v if not w in stop_words]
+        no_stop_words = [w for w in v if w not in stop_words]
         no_stop_words_data[k] = no_stop_words
 
     write_data("task1.2_no_stop_words.txt", no_stop_words_data, "Removed stop words for {}:\n{}")
