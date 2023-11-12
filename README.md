@@ -27,7 +27,7 @@ _NOTE: Follow the instructions in the [development environment](#development-env
 > - Calculate tf-idf for each word in each document and generate document-word matrix (each element in the matrix is the tf-idf score for a word in a document)
 > - Calculate pairwise cosine similarity for the documents
 
-Run the assignment (configure the [development environment](#development-environment) if you haven't done so yet):
+To run the assignment (configure the [development environment](#development-environment) if you haven't done so yet):
 
 ```bash
 source venv/bin/activate
@@ -41,7 +41,15 @@ See the [project that summarizes GitHub issues with large language models (LLM)]
 
 ## Assignment 3 - Image classification using TensorFlow Mobilenet
 
+Image classification with [TensorFlow Mobilenet](https://www.tensorflow.org/api_docs/python/tf/keras/applications/mobilenet/MobileNet).
 
+To run the assignment (configure the [development environment](#development-environment) if you haven't done so yet):
+
+```bash
+source venv/bin/activate
+cd assignment3-image-classification
+python image-classification.py
+```
 
 ## Development environment
 
