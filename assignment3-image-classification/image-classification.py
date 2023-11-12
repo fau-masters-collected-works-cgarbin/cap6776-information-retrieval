@@ -1,30 +1,33 @@
-"""Image classification using MobileNet and MobileNetV2"""
+"""Image classification using MobileNet and MobileNetV2.
+
+TensorFlow documentation:
+https://www.tensorflow.org/api_docs/python/tf/keras/applications/mobilenet/MobileNet
+"""
 import os
 from pathlib import Path
-import numpy as np
 import tensorflow as tf
-from tensorflow.keras.preprocessing import image
-from tensorflow.keras.applications import imagenet_utils
 
 IMAGE_FILE = "image.jpg"
 
 
 def load_and_preprocess_image(image_path):
-    """Load and preprocess an image."""
-    img = image.load_img(image_path, target_size=(224, 224))
-    image_array = image.img_to_array(img)
-    # Add a dimension to transform the array into a batch
-    image_batch = np.expand_dims(image_array, axis=0)
+    """Load and preprocess an image.
+
+    Code based on the example in the TensorFlow documentation:
+    https://www.tensorflow.org/guide/saved_model
+    """
+    img = tf.keras.utils.load_img(image_path, target_size=(224, 224))
+    x = tf.keras.utils.img_to_array(img)
 
     # There is also a mobilenet_v2.preprocess_input, but the results are the same
-    image_final = tf.keras.applications.mobilenet.preprocess_input(image_batch)
-    return image_final
+    x = tf.keras.applications.mobilenet.preprocess_input(x[tf.newaxis, ...])
+    return x
 
 
 def predict_image(img, model):
     """Predict the image using the given model."""
     predictions = model.predict(img)
-    results = imagenet_utils.decode_predictions(predictions)
+    results = tf.keras.applications.imagenet_utils.decode_predictions(predictions)
 
     print(model.name)
     for result in results[0]:
