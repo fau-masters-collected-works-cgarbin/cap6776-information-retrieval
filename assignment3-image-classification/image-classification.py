@@ -49,7 +49,7 @@ def main():
 
 if __name__ == "__main__":
     # In case it was started from the debugger (runs from the top-level directory)
-    # The code in the script assumes it is run from the assignment1-nltk directory
+    # The code in the script assumes it is run from the assignment directory
     asignment_dir = "assignment3-image-classification"
     if Path.cwd().name != asignment_dir:
         os.chdir(asignment_dir)
